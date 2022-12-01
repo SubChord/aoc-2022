@@ -91,7 +91,7 @@ func part2(lines []string) {
 
 	// print sum max 3
 	sum := 0
-	for i := len(values) - 1; i >= len(values)-3; i-- {
+	for i := len(values) - 3; i <= len(values)-1; i++ {
 		sum += values[i]
 	}
 
