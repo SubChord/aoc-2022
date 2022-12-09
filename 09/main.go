@@ -101,20 +101,14 @@ type knot struct {
 func part2(lines []string) {
 	seen := make(map[string]bool)
 
-	prevState := [10]knot{}
 	knots := [10]*knot{}
 	// init knots
 	for i := range knots {
 		knots[i] = &knot{}
-		prevState[i] = knot{}
 	}
 
 	// move head and make rest of knots follow
 	for _, line := range lines {
-		for i := range knots {
-			prevState[i] = *knots[i]
-		}
-
 		parts := strings.Split(line, " ")
 		dir := parts[0]
 		dist, _ := strconv.Atoi(parts[1])
