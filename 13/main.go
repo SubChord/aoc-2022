@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"os"
 	"sort"
@@ -105,6 +106,37 @@ func lineToNode(line string) node {
 	}
 }
 
+func lineToNode2(line string) node {
+	var n interface{}
+	err := json.Unmarshal([]byte(line), &n)
+	if err != nil {
+		panic(err)
+	}
+
+	return interfaceToNode(n)
+}
+
+func interfaceToNode(n interface{}) node {
+	switch v := n.(type) {
+	case []interface{}:
+		var list []node
+		for _, n := range v {
+			list = append(list, interfaceToNode(n))
+		}
+
+		return node{
+			list: &list,
+		}
+	case float64:
+		x := int(v)
+		return node{
+			v: &x,
+		}
+	default:
+		panic("Should not happen")
+	}
+}
+
 func nodeCompare(a, b node) int {
 	if a.isNumber() && b.isNumber() {
 		v1 := *a.v
@@ -166,8 +198,8 @@ func part1(lines []string) {
 	indices := []int{}
 	j := 1
 	for i := 0; i < len(lines); i += 3 {
-		a := lineToNode(lines[i])
-		b := lineToNode(lines[i+1])
+		a := lineToNode2(lines[i])
+		b := lineToNode2(lines[i+1])
 
 		if nodeCompare(a, b) > 0 {
 			indices = append(indices, j)
@@ -195,13 +227,13 @@ func part2(lines []string) {
 
 	nodes := []node{}
 	for _, line := range linesWithoutBlanks {
-		nodes = append(nodes, lineToNode(line))
+		nodes = append(nodes, lineToNode2(line))
 	}
 
 	b := true
-	n2 := lineToNode("[[2]]")
+	n2 := lineToNode2("[[2]]")
 	n2.marker = &b
-	n6 := lineToNode("[[6]]")
+	n6 := lineToNode2("[[6]]")
 	n6.marker = &b
 
 	nodes = append(nodes, n2)
