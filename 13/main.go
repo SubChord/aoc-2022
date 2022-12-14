@@ -230,11 +230,10 @@ func part2(lines []string) {
 		nodes = append(nodes, lineToNode2(line))
 	}
 
-	b := true
 	n2 := lineToNode2("[[2]]")
-	n2.marker = &b
+	n2.marker = new(bool)
 	n6 := lineToNode2("[[6]]")
-	n6.marker = &b
+	n6.marker = new(bool)
 
 	nodes = append(nodes, n2)
 	nodes = append(nodes, n6)
